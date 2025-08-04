@@ -3,13 +3,14 @@ import { Users, MapPin, Link, Shuffle, Download, Plus, Trash2, UserCheck } from 
 import defaultStaffList from './data/staffList.json';
 
 const StaffAssignmentTool = () => {
+
   // 預設載入您的名單
   const [staff, setStaff] = useState(defaultStaffList);
   const [assignments, setAssignments] = useState({ venueA: [], venueB: [] });
   const [showAddForm, setShowAddForm] = useState(false);
   const [newStaff, setNewStaff] = useState({ name: '', gender: '', preference: '', bondedWith: '' });
   const [bonds, setBonds] = useState([]);
-  
+
   // 新增場地設定
   const [venueSettings, setVenueSettings] = useState({
     venueA: { name: 'A場', maleCount: 9, femaleCount: 9, color: 'red' },
@@ -26,9 +27,14 @@ const StaffAssignmentTool = () => {
     return null;
   };
 
+  const [isBondedMoveEnabled, setIsBondedMoveEnabled] = useState(true);
+
+
+
+
   const addStaff = () => {
     if (!newStaff.name.trim()) return;
-    
+
     const staffMember = {
       id: Date.now(),
       name: newStaff.name.trim(),
@@ -36,7 +42,7 @@ const StaffAssignmentTool = () => {
       preference: newStaff.preference,
       bondedWith: newStaff.bondedWith ? newStaff.bondedWith.trim() : ''
     };
-    
+
     setStaff([...staff, staffMember]);
     setNewStaff({ name: '', gender: '', preference: '', bondedWith: '' });
     setShowAddForm(false);
@@ -56,11 +62,11 @@ const StaffAssignmentTool = () => {
   const createBonds = () => {
     const bondPairs = [];
     const processed = new Set();
-    
+
     staff.forEach(person => {
       if (person.bondedWith && !processed.has(person.id)) {
-        const partner = staff.find(s => 
-          s.name.toLowerCase() === person.bondedWith.toLowerCase() && 
+        const partner = staff.find(s =>
+          s.name.toLowerCase() === person.bondedWith.toLowerCase() &&
           s.id !== person.id
         );
         if (partner) {
@@ -70,32 +76,32 @@ const StaffAssignmentTool = () => {
         }
       }
     });
-    
+
     setBonds(bondPairs);
     return bondPairs;
   };
 
   // 智能分配演算法
   const autoAssign = () => {
-    const totalRequired = venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount + 
-                          venueSettings.venueB.maleCount + venueSettings.venueB.femaleCount;
-    
+    const totalRequired = venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount +
+      venueSettings.venueB.maleCount + venueSettings.venueB.femaleCount;
+
     if (staff.length !== totalRequired) {
       alert(`請確保總人數為${totalRequired}人 (A場:${venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount}人, B場:${venueSettings.venueB.maleCount + venueSettings.venueB.femaleCount}人)`);
       return;
     }
 
     const bondPairs = createBonds();
-    const unbondedStaff = staff.filter(person => 
+    const unbondedStaff = staff.filter(person =>
       !bondPairs.some(pair => pair.includes(person))
     );
-    
+
     const males = staff.filter(s => s.gender === '男');
     const females = staff.filter(s => s.gender === '女');
-    
+
     const totalMales = venueSettings.venueA.maleCount + venueSettings.venueB.maleCount;
     const totalFemales = venueSettings.venueA.femaleCount + venueSettings.venueB.femaleCount;
-    
+
     if (males.length !== totalMales || females.length !== totalFemales) {
       alert(`請確保性別比例正確 (需要: 男${totalMales}人, 女${totalFemales}人；目前: 男${males.length}人, 女${females.length}人)`);
       return;
@@ -108,11 +114,11 @@ const StaffAssignmentTool = () => {
     // 1. 處理綁定對且有偏好的
     bondPairs.forEach(pair => {
       if (assignedIds.has(pair[0].id) || assignedIds.has(pair[1].id)) return;
-      
+
       const preference = pair[0].preference === pair[1].preference ? pair[0].preference : '';
       const maxVenueA = venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount;
       const maxVenueB = venueSettings.venueB.maleCount + venueSettings.venueB.femaleCount;
-      
+
       if (preference === 'A' && venueA.length + 2 <= maxVenueA) {
         venueA.push(...pair);
         assignedIds.add(pair[0].id);
@@ -127,7 +133,7 @@ const StaffAssignmentTool = () => {
     // 2. 處理有偏好的單人
     const preferenceA = unbondedStaff.filter(s => s.preference === 'A' && !assignedIds.has(s.id));
     const preferenceB = unbondedStaff.filter(s => s.preference === 'B' && !assignedIds.has(s.id));
-    
+
     preferenceA.forEach(person => {
       const maxVenueA = venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount;
       if (venueA.length < maxVenueA) {
@@ -135,7 +141,7 @@ const StaffAssignmentTool = () => {
         assignedIds.add(person.id);
       }
     });
-    
+
     preferenceB.forEach(person => {
       const maxVenueB = venueSettings.venueB.maleCount + venueSettings.venueB.femaleCount;
       if (venueB.length < maxVenueB) {
@@ -147,10 +153,10 @@ const StaffAssignmentTool = () => {
     // 3. 處理剩餘的綁定對
     bondPairs.forEach(pair => {
       if (assignedIds.has(pair[0].id) || assignedIds.has(pair[1].id)) return;
-      
+
       const maxVenueA = venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount;
       const maxVenueB = venueSettings.venueB.maleCount + venueSettings.venueB.femaleCount;
-      
+
       if (venueA.length <= maxVenueA - 2) {
         venueA.push(...pair);
         assignedIds.add(pair[0].id);
@@ -166,17 +172,17 @@ const StaffAssignmentTool = () => {
     const remaining = staff.filter(s => !assignedIds.has(s.id));
     const remainingMales = remaining.filter(s => s.gender === '男');
     const remainingFemales = remaining.filter(s => s.gender === '女');
-    
+
     const venueAMales = venueA.filter(s => s.gender === '男').length;
     const venueAFemales = venueA.filter(s => s.gender === '女').length;
-    
+
     // 為場地A補充到指定的男女人數
     let maleIndex = 0, femaleIndex = 0;
-    
+
     while (venueA.length < venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount) {
       const needMales = venueSettings.venueA.maleCount - venueA.filter(s => s.gender === '男').length;
       const needFemales = venueSettings.venueA.femaleCount - venueA.filter(s => s.gender === '女').length;
-      
+
       if (needMales > 0 && maleIndex < remainingMales.length) {
         venueA.push(remainingMales[maleIndex]);
         assignedIds.add(remainingMales[maleIndex].id);
@@ -189,7 +195,7 @@ const StaffAssignmentTool = () => {
         break;
       }
     }
-    
+
     // 剩餘人員分配到場地B
     const finalRemaining = staff.filter(s => !assignedIds.has(s.id));
     venueB.push(...finalRemaining);
@@ -199,17 +205,45 @@ const StaffAssignmentTool = () => {
 
   // 手動移動人員
   const moveStaff = (staffMember, fromVenue, toVenue) => {
-    const maxToVenue = venueSettings[toVenue].maleCount + venueSettings[toVenue].femaleCount;
-    if (assignments[toVenue].length >= maxToVenue) {
-      alert('目標場地已滿');
-      return;
+    // const maxToVenue = venueSettings[toVenue].maleCount + venueSettings[toVenue].femaleCount;
+    // if (assignments[toVenue].length >= maxToVenue) {
+    //   alert('目標場地已滿');
+    //   return;
+    // }
+
+    // 檢查是否啟用綁定組別移動
+    const partner = getBondedPartner(staffMember);
+    // 條件判斷：如果「開關是開啟的」且「移動對象確實有夥伴」
+    console.log("Moving:", staffMember.name, "Found partner:", partner ? partner.name : "None");
+    if (isBondedMoveEnabled && partner) {
+      // 【邏輯 A】移動整個綁定組別 (使用函式更新，確保安全)
+      const idsToMove = [staffMember.id, partner.id];
+  
+      setAssignments(prevAssignments => {
+        // 從所有場地中過濾掉這兩個人
+        const filteredVenueA = prevAssignments.venueA.filter(p => !idsToMove.includes(p.id));
+        const filteredVenueB = prevAssignments.venueB.filter(p => !idsToMove.includes(p.id));
+  
+        // 準備好新的場地資料
+        const newAssignments = {
+          venueA: filteredVenueA,
+          venueB: filteredVenueB,
+        };
+  
+        // 將兩人一起加入到目標場地
+        newAssignments[toVenue] = [...newAssignments[toVenue], staffMember, partner];
+        
+        return newAssignments;
+      });
+  
+    } else {
+      // 【邏輯 B】只移動單人 (這部分已是安全的函式更新)
+      setAssignments(prev => ({
+        ...prev,
+        [fromVenue]: prev[fromVenue].filter(s => s.id !== staffMember.id),
+        [toVenue]: [...prev[toVenue], staffMember],
+      }));
     }
-    
-    setAssignments({
-      ...assignments,
-      [fromVenue]: assignments[fromVenue].filter(s => s.id !== staffMember.id),
-      [toVenue]: [...assignments[toVenue], staffMember]
-    });
   };
 
   // 匯出結果
@@ -218,9 +252,9 @@ const StaffAssignmentTool = () => {
       'A場地 (18人)': assignments.venueA.map(s => `${s.name} (${s.gender})`),
       'B場地 (18人)': assignments.venueB.map(s => `${s.name} (${s.gender})`)
     };
-    
+
     const dataStr = JSON.stringify(results, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
@@ -372,7 +406,7 @@ const StaffAssignmentTool = () => {
                   總需求人數: {venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount + venueSettings.venueB.maleCount + venueSettings.venueB.femaleCount}人
                 </div>
                 <div className="text-sm text-green-600 mt-1">
-                  男生: {venueSettings.venueA.maleCount + venueSettings.venueB.maleCount}人 | 
+                  男生: {venueSettings.venueA.maleCount + venueSettings.venueB.maleCount}人 |
                   女生: {venueSettings.venueA.femaleCount + venueSettings.venueB.femaleCount}人
                 </div>
               </div>
@@ -406,12 +440,12 @@ const StaffAssignmentTool = () => {
                 type="text"
                 placeholder="姓名"
                 value={newStaff.name}
-                onChange={(e) => setNewStaff({...newStaff, name: e.target.value})}
+                onChange={(e) => setNewStaff({ ...newStaff, name: e.target.value })}
                 className="px-3 py-2 border rounded-lg"
               />
               <select
                 value={newStaff.gender}
-                onChange={(e) => setNewStaff({...newStaff, gender: e.target.value})}
+                onChange={(e) => setNewStaff({ ...newStaff, gender: e.target.value })}
                 className="px-3 py-2 border rounded-lg"
               >
                 <option value="">選擇性別</option>
@@ -420,7 +454,7 @@ const StaffAssignmentTool = () => {
               </select>
               <select
                 value={newStaff.preference}
-                onChange={(e) => setNewStaff({...newStaff, preference: e.target.value})}
+                onChange={(e) => setNewStaff({ ...newStaff, preference: e.target.value })}
                 className="px-3 py-2 border rounded-lg"
               >
                 <option value="">場地偏好</option>
@@ -514,18 +548,18 @@ const StaffAssignmentTool = () => {
             {(staff.filter((s) => s.gender === '男').length !==
               venueSettings.venueA.maleCount + venueSettings.venueB.maleCount ||
               staff.filter((s) => s.gender === '女').length !==
-                venueSettings.venueA.femaleCount +
-                  venueSettings.venueB.femaleCount) && (
-              <div className="mt-3 p-2 bg-yellow-100 border border-yellow-400 rounded text-yellow-700 text-sm">
-                ⚠️ 注意：需要男生
-                {venueSettings.venueA.maleCount + venueSettings.venueB.maleCount}
-                人，女生
-                {venueSettings.venueA.femaleCount + venueSettings.venueB.femaleCount}
-                人才能進行平衡分配 (目前: 男
-                {staff.filter((s) => s.gender === '男').length}人, 女
-                {staff.filter((s) => s.gender === '女').length}人)
-              </div>
-            )}
+              venueSettings.venueA.femaleCount +
+              venueSettings.venueB.femaleCount) && (
+                <div className="mt-3 p-2 bg-yellow-100 border border-yellow-400 rounded text-yellow-700 text-sm">
+                  ⚠️ 注意：需要男生
+                  {venueSettings.venueA.maleCount + venueSettings.venueB.maleCount}
+                  人，女生
+                  {venueSettings.venueA.femaleCount + venueSettings.venueB.femaleCount}
+                  人才能進行平衡分配 (目前: 男
+                  {staff.filter((s) => s.gender === '男').length}人, 女
+                  {staff.filter((s) => s.gender === '女').length}人)
+                </div>
+              )}
           </div>
         )}
       </div>
@@ -533,6 +567,20 @@ const StaffAssignmentTool = () => {
       {/* 分配操作區域 */}
       <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
         <div className="flex gap-4 mb-4">
+          <div className="flex items-center space-x-2 p-3 bg-gray-100 rounded-lg">
+            <Link className="w-4 h-4 text-gray-600" />
+            <span className="text-sm font-medium text-gray-700">綁定組別同步移動</span>
+            <label htmlFor="toggle-bonded-move" className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                id="toggle-bonded-move"
+                className="sr-only peer"
+                checked={isBondedMoveEnabled}
+                onChange={() => setIsBondedMoveEnabled(!isBondedMoveEnabled)}
+              />
+              <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            </label>
+          </div>
           <button
             onClick={autoAssign}
             disabled={staff.length !== 36}
@@ -587,7 +635,6 @@ const StaffAssignmentTool = () => {
                     <button
                       onClick={() => moveStaff(person, 'venueA', 'venueB')}
                       className="text-blue-600 hover:text-blue-800 text-sm"
-                      disabled={assignments.venueB.length >= 18}
                     >
                       移至B場 →
                     </button>
@@ -629,7 +676,6 @@ const StaffAssignmentTool = () => {
                     <button
                       onClick={() => moveStaff(person, 'venueB', 'venueA')}
                       className="text-red-600 hover:text-red-800 text-sm"
-                      disabled={assignments.venueA.length >= (venueSettings.venueA.maleCount + venueSettings.venueA.femaleCount)}
                     >
                       ← 移至A場
                     </button>
