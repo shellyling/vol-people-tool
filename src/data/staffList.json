@@ -1,0 +1,254 @@
+[
+  {
+    "id": 1,
+    "name": "裕",
+    "gender": "男",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 2,
+    "name": "煒筌",
+    "gender": "男",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 3,
+    "name": "Ricky",
+    "gender": "男",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 4,
+    "name": "鴻清",
+    "gender": "男",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 5,
+    "name": "祖寧",
+    "gender": "男",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 6,
+    "name": "致澄",
+    "gender": "男",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 7,
+    "name": "84",
+    "gender": "男",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 8,
+    "name": "宗穎",
+    "gender": "男",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 9,
+    "name": "博安",
+    "gender": "男",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 10,
+    "name": "軒轅",
+    "gender": "男",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 11,
+    "name": "勛華",
+    "gender": "男",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 12,
+    "name": "A瓜",
+    "gender": "男",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 13,
+    "name": "CCC",
+    "gender": "男",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 14,
+    "name": "Benjamin",
+    "gender": "男",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 15,
+    "name": "泡泡",
+    "gender": "男",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 16,
+    "name": "白白",
+    "gender": "男",
+    "preference": "A",
+    "bondedWith": "阿嫻"
+  },
+  {
+    "id": 17,
+    "name": "昕辰",
+    "gender": "男",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 18,
+    "name": "阿松",
+    "gender": "男",
+    "preference": "C",
+    "bondedWith": "小陸"
+  },
+  {
+    "id": 19,
+    "name": "Ethan",
+    "gender": "男",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 20,
+    "name": "卡卡",
+    "gender": "男",
+    "preference": "C",
+    "bondedWith": "Shelly"
+  },
+  {
+    "id": 21,
+    "name": "連成",
+    "gender": "男",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 22,
+    "name": "元豐",
+    "gender": "男",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 23,
+    "name": "立",
+    "gender": "男",
+    "preference": "C",
+    "bondedWith": "Ruru"
+  },
+  {
+    "id": 24,
+    "name": "派派",
+    "gender": "女",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 25,
+    "name": "小陸",
+    "gender": "女",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 26,
+    "name": "Ruru",
+    "gender": "女",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 27,
+    "name": "Frena",
+    "gender": "女",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 28,
+    "name": "Shelly",
+    "gender": "女",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 29,
+    "name": "韻嘉",
+    "gender": "女",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 30,
+    "name": "芳芳",
+    "gender": "女",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 31,
+    "name": "慈安",
+    "gender": "女",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 32,
+    "name": "KiKi",
+    "gender": "女",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 33,
+    "name": "子婷",
+    "gender": "女",
+    "preference": "C",
+    "bondedWith": ""
+  },
+  {
+    "id": 34,
+    "name": "阿嫻",
+    "gender": "女",
+    "preference": "B",
+    "bondedWith": ""
+  },
+  {
+    "id": 35,
+    "name": "Jessica",
+    "gender": "女",
+    "preference": "A",
+    "bondedWith": ""
+  },
+  {
+    "id": 36,
+    "name": "Dorris",
+    "gender": "女",
+    "preference": "C",
+    "bondedWith": ""
+  }
+]
